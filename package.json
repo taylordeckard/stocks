@@ -7,6 +7,17 @@
     "name": "Maxime GRIS",
     "email": "maxime.gris@gmail.com"
   },
+  "build": {
+    "appId": "stocks",
+    "mac": {
+      "category": "public.app-category.finance",
+      "icon": "./quokka.icns"
+    },
+    "files": [
+      "./main.js",
+      "./dist/**/*"
+    ]
+  },
   "keywords": [
     "angular",
     "angular 9",
@@ -43,6 +54,8 @@
     "@angular-builders/custom-webpack": "9.1.0",
     "@angular-devkit/build-angular": "0.901.4",
     "@angular-eslint/builder": "0.0.1-alpha.18",
+    "@angular/animations": "~9.1.9",
+    "@angular/cdk": "^9.2.4",
     "@angular/cli": "9.1.4",
     "@angular/common": "9.1.4",
     "@angular/compiler": "9.1.4",
@@ -50,9 +63,13 @@
     "@angular/core": "9.1.4",
     "@angular/forms": "9.1.4",
     "@angular/language-service": "9.1.4",
+    "@angular/material": "^9.2.4",
     "@angular/platform-browser": "9.1.4",
     "@angular/platform-browser-dynamic": "9.1.4",
     "@angular/router": "9.1.4",
+    "@fortawesome/angular-fontawesome": "^0.6.1",
+    "@fortawesome/fontawesome-svg-core": "^1.2.28",
+    "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@ngx-translate/core": "12.1.2",
     "@ngx-translate/http-loader": "4.0.0",
     "@types/jasmine": "3.5.10",
@@ -61,7 +78,9 @@
     "@types/node": "12.11.1",
     "@typescript-eslint/eslint-plugin": "2.27.0",
     "@typescript-eslint/parser": "2.27.0",
+    "axios": "^0.19.2",
     "chai": "4.2.0",
+    "cheerio": "^1.0.0-rc.3",
     "codelyzer": "5.2.2",
     "conventional-changelog-cli": "2.0.32",
     "core-js": "3.6.5",
@@ -74,6 +93,7 @@
     "eslint-plugin-import": "2.20.2",
     "jasmine-core": "3.5.0",
     "jasmine-spec-reporter": "5.0.2",
+    "jquery": "^3.5.1",
     "karma": "5.0.4",
     "karma-coverage-istanbul-reporter": "3.0.0",
     "karma-electron": "6.3.0",

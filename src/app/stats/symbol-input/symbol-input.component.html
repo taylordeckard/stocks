@@ -1,0 +1,13 @@
+<div>
+  <mat-form-field>
+    <input
+      matInput
+      [formControl]="symbolControl"
+      placeholder="Add Symbol"
+      (keydown)="onKeydown($event)"
+    >
+  </mat-form-field>
+  <span class="btn-icon" (click)="addSymbol()" [class.disabled]="symbolControl.invalid">
+    <fa-icon [icon]="faPlusCircle"></fa-icon>
+  </span>
+</div>

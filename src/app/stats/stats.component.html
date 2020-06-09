@@ -1,0 +1,168 @@
+<div class="flex">
+  <div>
+    <mat-checkbox [(ngModel)]="filtered">Filter Highlights</mat-checkbox>
+  </div>
+  <div class="search">
+    <mat-form-field>
+      <input
+        matInput
+        #searchInput
+        type="search"
+        placeholder="Search"
+        [(ngModel)]="searchTerm" />
+    </mat-form-field>
+  </div>
+</div>
+<div
+  class="table-container"
+  *ngIf="data$ | async | search:searchTerm:['symbol'] | filterHighlighted:filtered | sortBy:sortKey:sortDir as stocks">
+  <table>
+    <thead>
+      <ng-container *ngTemplateOutlet="caret; context: {
+        key: 'symbol',
+        label: 'Symbol'
+      }"></ng-container>
+      <ng-container *ngTemplateOutlet="caret; context: {
+        key: 'quote',
+        label: 'Quote'
+      }"></ng-container>
+      <ng-container *ngTemplateOutlet="caret; context: {
+        key: 'stopLoss',
+        label: 'Stop Loss'
+      }"></ng-container>
+      <ng-container *ngTemplateOutlet="caret; context: {
+        key: 'rating',
+        label: 'Rating'
+      }"></ng-container>
+      <ng-container *ngTemplateOutlet="caret; context: {
+        key: 'pe',
+        label: 'PE'
+      }"></ng-container>
+      <ng-container *ngTemplateOutlet="caret; context: {
+        key: 'eps',
+        label: 'EPS'
+      }"></ng-container>
+      <ng-container *ngTemplateOutlet="caret; context: {
+        key: 'percentInsiders',
+        label: '% Insider'
+      }"></ng-container>
+      <ng-container *ngTemplateOutlet="caret; context: {
+        key: 'dividendYield',
+        label: 'Dividend Yield'
+      }"></ng-container>
+      <ng-container *ngTemplateOutlet="caret; context: {
+        key: 'pivot',
+        label: 'Pivot'
+      }"></ng-container>
+      <ng-container *ngTemplateOutlet="caret; context: {
+        key: 'esg',
+        label: 'ESG Risk'
+      }"></ng-container>
+      <ng-container *ngTemplateOutlet="caret; context: {
+        key: 'sector',
+        label: 'Sector'
+      }"></ng-container>
+      <ng-container *ngTemplateOutlet="caret; context: {
+        key: 'fairValue',
+        label: 'Valuation'
+      }"></ng-container>
+      <ng-container *ngTemplateOutlet="caret; context: {
+        key: 'forecast',
+        label: 'Wallet Investor'
+      }"></ng-container>
+      <ng-container *ngTemplateOutlet="caret; context: {
+        key: 'recommendation',
+        label: 'Argus'
+      }"></ng-container>
+      <ng-container *ngTemplateOutlet="caret; context: {
+        key: 'yahooAdvice',
+        label: 'Yahoo'
+      }"></ng-container>
+      <ng-container *ngTemplateOutlet="caret; context: {
+        key: 'advice',
+        label: 'Zacks'
+      }"></ng-container>
+      <th>
+        <span class="icon-btn" (click)="refresh(stocks)">
+          <fa-icon [icon]="faSync"></fa-icon>
+        </span>
+      </th>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let stock of stocks">
+        <tr
+          (click)="toggleRowHighlight(stock)"
+          [ngClass]="{ 'highlight': stock.highlight }"
+        >
+          <td>
+            <span>{{stock.symbol}}</span>
+          </td>
+          <td>{{'$' + stock.quote}}</td>
+          <td>${{stock.stopLoss | number:'1.1-2'}}</td>
+          <td>{{stock.rating}}</td>
+          <td>{{stock.pe}}%</td>
+          <td>${{stock.eps}}</td>
+          <td>%{{stock.percentInsiders}}</td>
+          <td>{{((stock.dividendYield || 0) | number:'1.1-3') + '%'}}</td>
+          <td>{{'$' + stock.pivot}}</td>
+          <td>{{stock.esg}}</td>
+          <td>{{stock.sector}}</td>
+          <td>{{stock.fairValue}}</td>
+          <td [ngClass]="stock.forecast | colorize">
+            <a
+              target="__blank"
+              href="https://walletinvestor.com/stock-forecast/{{stock.symbol}}-stock-prediction"
+              (click)="$event.stopPropagation()"
+            >
+            {{stock.forecast}}
+            </a>
+          </td>
+
+          <td [ngClass]="stock.recommendation | colorize">
+            {{stock.recommendation}}
+          </td>
+          <td [ngClass]="stock.yahooAdvice | colorize">
+            <a
+              target="__blank"
+              href="https://finance.yahoo.com/quote/{{stock.symbol}}/holders?p=${{stock.symbol}}"
+              (click)="$event.stopPropagation()"
+            >
+            {{stock.yahooAdvice | number:'1.1-2'}}
+            </a>
+          </td>
+          <td [ngClass]="stock.advice | colorize">
+            <a
+              target="__blank"
+              href="https://www.zacks.com/stock/quote/{{stock.symbol}}?q={{stock.symbol}}"
+              (click)="$event.stopPropagation()"
+            >
+            {{stock.advice}}
+            </a>
+          </td>
+          <td>
+            <span class="icon-btn" (click)="removeSymbol(stock.symbol)">
+              <fa-icon [icon]="faTrash"></fa-icon>
+            </span>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</div>
+<ng-template #caret let-key="key" let-label="label">
+  <th (click)="toggleSort(key)">
+    <span [innerText]="label"></span>
+    <ng-container *ngIf="sortKey === key">
+      <div class="caret">
+        <fa-icon *ngIf="sortDir === 'asc'" [icon]="faCaretDown"></fa-icon>
+        <fa-icon *ngIf="sortDir === 'desc'" [icon]="faCaretUp"></fa-icon>
+      </div>
+    </ng-container>
+  </th>
+</ng-template>
+<ng-container *ngIf="!isLoading">
+  <app-symbol-input (symbolAdded)="onAddSymbol($event)"></app-symbol-input>
+</ng-container>
+<ng-container *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+</ng-container>

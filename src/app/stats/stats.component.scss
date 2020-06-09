@@ -1,0 +1,90 @@
+:host {
+  th {
+    cursor: pointer;
+  }
+  .icon-btn {
+    cursor: pointer;
+  }
+  .caret {
+    display: inline-block;
+    margin-left: 10px;
+  }
+
+  table {
+    width: 100%;
+    border-spacing: 0;
+    thead th:not(:first-child) {
+      position: sticky;
+      z-index: 1;
+      top: 0;
+      background: #212121;
+    }
+    th {
+      text-align: left;
+    }
+    tr, thead { background: #212121; }
+    tr:nth-child(even) {
+      background: #2d2d2d;
+    }
+    th, td {
+      padding: 10px;
+    }
+  }
+
+  mat-spinner {
+    position: fixed;
+    left: calc(50vw - 50px);
+    top: calc(50vh - 50px);
+  }
+
+  .good, .good > a:visited, .good > a:link {
+    color: #5ff17f;
+  }
+  .bad, .bad > a:visited, .bad > a:link {
+    color: #ff402d;
+  }
+  .neutral, .neutral > a:visited, .neutral > a:link {
+    color: #faff00;
+  }
+
+  mat-form-field {
+    margin-bottom: 20px;
+  }
+
+  .highlight {
+    background: #353403 !important;
+  }
+
+  .checkbox {
+    cursor: pointer;
+  }
+
+  .flex {
+    display: flex;
+  }
+
+  .search {
+    margin-left: auto;
+  }
+
+  .table-container {
+    position: relative;
+    overflow: auto;
+    white-space: nowrap;
+    max-height: 80vh;
+  }
+
+  table th:first-child {
+    z-index: 2;
+    position: sticky;
+    left: 0;
+    top: 0;
+    background: #212121;
+  }
+
+  tr td:first-child {
+    position: sticky;
+    left: 0;
+    background: inherit;
+  }
+}

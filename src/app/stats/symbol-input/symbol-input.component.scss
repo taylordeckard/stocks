@@ -1,0 +1,13 @@
+:host {
+  display: block;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  .btn-icon {
+    cursor: pointer;
+    margin-left: 6px;
+    &.disabled {
+      cursor: not-allowed;
+      color: gray;
+    }
+  }
+}

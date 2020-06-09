@@ -1,0 +1,13 @@
+:host {
+  .card {
+    transition: background .2s;
+    height: calc(100% - 40px);
+    padding: 20px;
+    &.green {
+      background: #409640c9;
+    }
+    &.red {
+      background: #982b2bd6;
+    }
+  }
+}
