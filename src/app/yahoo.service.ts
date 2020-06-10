@@ -19,58 +19,70 @@ export class YahooService {
 
   private async getInsiderPercentage (symbol: string) {
     const url = `https://finance.yahoo.com/quote/${symbol}/holders?p=${symbol}`;
-    const response = await fetch(url);
-    const htmlText = await response.text();
-    const page = $(htmlText.replace(/src=.*?>/g, ''));
-    const text = page.find('[data-test="holder-summary"] td').first().text();
+    try {
+      const response = await fetch(url);
+      const htmlText = await response.text();
+      const page = $(htmlText.replace(/src=.*?>/g, ''));
+      const text = page.find('[data-test="holder-summary"] td').first().text();
 
-    return Number(text.replace('%', ''));
+      return Number(text.replace('%', ''));
+    } catch (e) {
+      return '';
+    }
   }
 
   private async getSummary (symbol: string) {
     const url = `https://finance.yahoo.com/quote/${symbol}?p=${symbol}`;
-    const response = await fetch(url);
-    const page = await response.text();
-    const doc = $(page.replace(/src=.*?>/g, ''));
+    try {
+      const response = await fetch(url);
+      const page = await response.text();
+      const doc = $(page.replace(/src=.*?>/g, ''));
 
-    const quote = Number(doc
-      .find('#quote-header-info > div:nth-child(3) > div > div > span').first().text());
-    const pe = Number(doc
-      .find('[data-test="PE_RATIO-value"]').text()
-      .replace(',', '')
-      .replace('N/A', ''));
-    const eps = Number(doc
-      .find('[data-test="EPS_RATIO-value"]').text());
-    const fairValue = doc
-      .find('[data-yaft-module="tdv2-applet-ResearchQuoteStatsInsights"]')
-      .find('> div > div:nth-child(2) > div:nth-child(2)')
-      .text();
-    const dividendYield = doc
-      .find('[data-test="DIVIDEND_AND_YIELD-value"]')
-      .text()
-      .match(/\(((\d|\.)+)%\)/)?.[1];
+      const quote = Number(doc
+        .find('#quote-header-info > div:nth-child(3) > div > div > span').first().text());
+      const pe = Number(doc
+        .find('[data-test="PE_RATIO-value"]').text()
+        .replace(',', '')
+        .replace('N/A', ''));
+      const eps = Number(doc
+        .find('[data-test="EPS_RATIO-value"]').text());
+      const fairValue = doc
+        .find('[data-yaft-module="tdv2-applet-ResearchQuoteStatsInsights"]')
+        .find('> div > div:nth-child(2) > div:nth-child(2)')
+        .text();
+      const dividendYield = doc
+        .find('[data-test="DIVIDEND_AND_YIELD-value"]')
+        .text()
+        .match(/\(((\d|\.)+)%\)/)?.[1];
 
-    const embedded = this.getEmbeddedSummary(page);
-    
-    return {
-      ...embedded,
-      dividendYield,
-      eps,
-      fairValue,
-      pe,
-      quote,
+      const embedded = this.getEmbeddedSummary(page);
+      
+      return {
+        ...embedded,
+        dividendYield,
+        eps,
+        fairValue,
+        pe,
+        quote,
+      }
+    } catch (e) {
+      return {};
     }
   }
 
   private async getInsights (symbol: string) {
     const url = `https://query1.finance.yahoo.com/ws/insights/v2/finance/insights?lang=en-US&region=US&symbol=${symbol}&getAllResearchReports=true&reportsCount=2&corsDomain=finance.yahoo.com`;
-    const response = await fetch(url);
-    const data = await response.json();
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
 
-    return {
-      stopLoss: data?.finance?.result?.instrumentInfo?.keyTechnicals?.stopLoss,
-      recommendation: data?.finance?.result?.recommendation?.rating,
-    };
+      return {
+        stopLoss: data?.finance?.result?.instrumentInfo?.keyTechnicals?.stopLoss,
+        recommendation: data?.finance?.result?.recommendation?.rating,
+      };
+    } catch (e) {
+      return {};
+    }
   }
 
   private getEmbeddedSummary (page: string) {

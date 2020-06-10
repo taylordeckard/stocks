@@ -124,7 +124,7 @@
           <td [ngClass]="stock.yahooAdvice | colorize">
             <a
               target="__blank"
-              href="https://finance.yahoo.com/quote/{{stock.symbol}}/holders?p=${{stock.symbol}}"
+              href="https://finance.yahoo.com/quote/{{stock.symbol}}"
               (click)="$event.stopPropagation()"
             >
             {{stock.yahooAdvice | number:'1.1-2'}}

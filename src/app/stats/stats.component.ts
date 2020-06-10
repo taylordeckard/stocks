@@ -41,7 +41,7 @@ export class StatsComponent implements AfterViewInit {
   @ViewChild('searchInput') searchInput: ElementRef<any>;
   public symbols: string[] = [];
   private refresh$ = new Subject<Stock[]>();
-  public data$: Observable<Stock[]> = this.refresh$.asObservable();
+  public data$: Observable<Stock[]> = this.refresh$;
   private stats: Stock[] = [];
   public sortKey = 'symbol';
   public sortDir: 'asc' | 'desc' = 'asc';
@@ -110,7 +110,8 @@ export class StatsComponent implements AfterViewInit {
     this.setHighlightedRows(stats);
     this.updateLocalStocks(stats);
     localStorage.setItem(lsStatsKey, JSON.stringify(this.stats));
-    this.refresh$.next(this.stats);
+    this.refresh$.next([...this.stats]);
+	this.cdr.detectChanges();
   }
 
   public onAddSymbol(symbol: string) {
@@ -129,14 +130,6 @@ export class StatsComponent implements AfterViewInit {
 
   public async refresh(stocks: Stock[]) {
     await this.fetchData(stocks.map(s => s.symbol));
-  }
-
-  public search() {
-    if (this.searchTerm) {
-      this.refresh$.next(this.stats.filter(s => searchRE(this.searchTerm).test(s.symbol)));
-    } else {
-      this.refresh$.next(this.stats);
-    }
   }
 
   public toggleRowHighlight(stock: Stock) {
