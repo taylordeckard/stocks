@@ -38,8 +38,13 @@ export class YahooService {
       const page = await response.text();
       const doc = $(page.replace(/src=.*?>/g, ''));
 
-      const quote = Number(doc
-        .find('#quote-header-info > div:nth-child(3) > div > div > span').first().text());
+      const q = doc
+        .find('#quote-header-info > div:nth-child(3) > div > div > span')
+        .first()
+        .text()
+        .replace(',', '');
+      const quote = q ? Number(q) : 0;
+      console.log(quote);
       const pe = Number(doc
         .find('[data-test="PE_RATIO-value"]').text()
         .replace(',', '')
@@ -50,10 +55,11 @@ export class YahooService {
         .find('[data-yaft-module="tdv2-applet-ResearchQuoteStatsInsights"]')
         .find('> div > div:nth-child(2) > div:nth-child(2)')
         .text();
-      const dividendYield = doc
+      const dy = doc
         .find('[data-test="DIVIDEND_AND_YIELD-value"]')
         .text()
         .match(/\(((\d|\.)+)%\)/)?.[1];
+      const dividendYield = dy ? Number(dy) : 0;
 
       const embedded = this.getEmbeddedSummary(page);
       
